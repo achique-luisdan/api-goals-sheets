@@ -41,4 +41,21 @@ router.get('/goals/:id', async (request: Request, response: Response) => {
   response.json(result);
 });
 
+/**
+ * Descripción: Editar Meta por ID
+ * Autor: achique-luisdan
+ * Fecha: 07-12-2021
+ */
+router.put('/goals/:id', async (request: Request, response: Response) => {
+  const goal = await getRepository(Goal).findOne(
+    { 'id': Number(request.params.id) },
+  );
+  if (goal) {
+    getRepository(Goal).merge(goal, request.body);
+    const result = getRepository(Goal).save(goal);
+    response.json(result);
+  }
+});
+
+
 export default router;
