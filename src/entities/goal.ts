@@ -3,7 +3,7 @@ import { Action } from './action';
 
 @Entity()
 /**
- * Descripción: Clase Goal
+ * Descripción: Clase Meta
  * Autor: achique-luisdan
  * Fecha: 07-12-2021
  */

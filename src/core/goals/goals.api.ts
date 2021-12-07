@@ -15,7 +15,7 @@ router.get('/goals', async (request: Request, response: Response) => {
 });
 
 /**
- * Descripción: Registra una Meta
+ * Descripción: Registrar Meta
  * Autor: achique-luisdan
  * Fecha: 07-12-2021
  */
@@ -30,7 +30,7 @@ router.post('/goals', async (request: Request, response: Response) => {
 });
 
 /**
- * Descripción: Consultar una Meta por ID
+ * Descripción: Consultar Meta por ID
  * Autor: achique-luisdan
  * Fecha: 07-12-2021
  */
