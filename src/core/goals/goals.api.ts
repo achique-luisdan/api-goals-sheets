@@ -11,7 +11,13 @@ const router = Router();
  */
 router.get('/goals', async (request: Request, response: Response) => {
   const goals = await getRepository(Goal).find();
-  response.json(goals);
+  const length:number = goals.length;
+  response.json({
+    'goals': goals,
+    'msg': 'Very successful!',
+    'length': length,
+    'code': 200,
+  });
 });
 
 /**
