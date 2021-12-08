@@ -12,6 +12,9 @@ export class Action {
     id: number;
 
   @Column()
+    done: boolean;
+
+  @Column()
     description: string;
 
   @ManyToOne((type) => Goal, (goal) => goal.actions)
