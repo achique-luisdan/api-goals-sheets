@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Goal } from '../../entities/goal';
+import { ListGoals, ReadGoal } from './goals-responses';
 
 const router = Router();
 
@@ -11,13 +12,23 @@ const router = Router();
  */
 router.get('/goals', async (request: Request, response: Response) => {
   const goals = await getRepository(Goal).find();
-  const length:number = goals.length;
-  response.json({
-    'goals': goals,
-    'msg': 'Very successful!',
-    'length': length,
-    'code': 200,
+  const results: number = goals.length;
+  const readGoals: ReadGoal [] = [];
+  goals.forEach((element) => {
+    const readGoal: ReadGoal =
+    new ReadGoal();
+    readGoal.goal = element;
+    readGoal.progress = element.calculateProgress();
+    readGoals.push(readGoal);
   });
+  const listGoals: ListGoals = new ListGoals();
+  listGoals.goals = readGoals;
+  listGoals.msg = 'Consulta exitosa';
+  listGoals.results = results;
+  listGoals.code = response.statusCode;
+  response.jsonp(
+    listGoals,
+  );
 });
 
 /**
@@ -44,7 +55,10 @@ router.get('/goals/:id', async (request: Request, response: Response) => {
   const result = await getRepository(Goal).findOne(
     { 'id': Number(request.params.id) },
   );
-  response.json(result);
+  const readGoal: ReadGoal = new ReadGoal();
+  readGoal.goal = result!;
+  readGoal.progress = result?.calculateProgress()!;
+  response.json(readGoal);
 });
 
 /**
@@ -59,6 +73,22 @@ router.put('/goals/:id', async (request: Request, response: Response) => {
   if (goal) {
     getRepository(Goal).merge(goal, request.body);
     const result = getRepository(Goal).save(goal);
+    response.json(result);
+  }
+});
+
+
+/**
+ * Descripción: Eliminar objetivo por ID
+ * Autor: achique-luisdan
+ * Fecha: 07-12-2021
+ */
+router.delete('/goals/:id', async (request: Request, response: Response) => {
+  const goal = await getRepository(Goal).findOne(
+    { 'id': Number(request.params.id) },
+  );
+  if (goal) {
+    const result = getRepository(Goal).remove(goal);
     response.json(result);
   }
 });
